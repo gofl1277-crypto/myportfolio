@@ -327,6 +327,134 @@
       background: var(--bg-sub);
     }
 
+    .trio-section {
+      background: var(--bg);
+    }
+
+    .trio-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 560px);
+      gap: var(--s3);
+      align-items: end;
+      margin-bottom: var(--s3);
+    }
+
+    .trio-head h2 {
+      margin: 0;
+      font-size: var(--fs-heading);
+    }
+
+    .trio-note {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: var(--fs-caption);
+      font-weight: 500;
+      text-align: right;
+    }
+
+    .trio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--s3);
+    }
+
+    .trio-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--s2);
+      width: 100%;
+      min-height: 128px;
+      padding: var(--s3);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-sub);
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .trio-card:hover,
+    .trio-card.is-active {
+      border-color: var(--point);
+    }
+
+    .trio-card:active {
+      transform: scale(.98);
+    }
+
+    .trio-card:focus-visible,
+    .trio-chip:focus-visible {
+      outline: 2px solid var(--point);
+      outline-offset: 4px;
+    }
+
+    .trio-card strong {
+      display: block;
+      margin-bottom: var(--s1);
+      font-size: var(--fs-body);
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .trio-card span:not(.trio-icon) {
+      display: block;
+      color: var(--text-sub);
+      font-size: var(--fs-caption);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .trio-icon {
+      color: var(--text-sub);
+      font-size: 24px;
+      line-height: 1;
+      transition: transform .2s;
+    }
+
+    .trio-card.is-active .trio-icon {
+      transform: rotate(45deg);
+    }
+
+    .trio-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .2s;
+    }
+
+    .trio-panel.is-open {
+      max-height: 640px;
+    }
+
+    .trio-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s1);
+      padding-top: var(--s3);
+    }
+
+    .trio-chip {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: var(--s1) var(--s2);
+      background: var(--bg);
+      color: var(--text);
+      font-size: var(--fs-caption);
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color .2s, color .2s, transform .2s;
+    }
+
+    .trio-chip:hover {
+      border-color: var(--point);
+      color: var(--point);
+    }
+
+    .trio-chip:active {
+      transform: scale(.98);
+    }
+
     .fit-box {
       padding: var(--s4);
       border-radius: var(--radius);
@@ -447,7 +575,8 @@
     }
 
     .button-link,
-    .award-link {
+    .award-link,
+    .tool-open {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -464,10 +593,25 @@
     }
 
     .button-link:hover,
-    .award-link:hover {
+    .award-link:hover,
+    .tool-open:hover {
       color: #fff;
       filter: brightness(.92);
       text-decoration: none;
+    }
+
+    .tool-preview {
+      display: grid;
+      gap: var(--s2);
+      margin-top: var(--s3);
+    }
+
+    .tool-preview iframe {
+      width: 100%;
+      min-height: 520px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg);
     }
 
     footer {
@@ -498,12 +642,15 @@
       .hero-inner,
       .summary-grid,
       .card-grid,
+      .trio-grid,
       .section-head,
+      .trio-head,
       .worklog-grid {
         grid-template-columns: 1fr;
       }
 
-      .section-note {
+      .section-note,
+      .trio-note {
         text-align: left;
       }
 
@@ -553,10 +700,6 @@
   </style>
 </head>
 <body>
-  <a href="../index.html#tools" target="_top"
-   style="display:inline-block;margin:16px;padding:8px 16px;border:1px solid #e5e7eb;border-radius:12px;color:#1a1a1a;text-decoration:none;font-size:14px;">
-  ← 포트폴리오로 돌아가기
-  </a>
   <header class="hero" id="hero">
     <div class="wrap hero-inner">
       <div>
@@ -606,6 +749,41 @@
   </nav>
 
   <main>
+    <section class="trio-section" aria-labelledby="trio-title">
+      <div class="wrap">
+        <div class="trio-head">
+          <h2 id="trio-title">삼박자로 보는 나의 경험</h2>
+          <p class="trio-note">박스를 누르면 연결된 경험을 볼 수 있습니다.</p>
+        </div>
+        <div class="trio-grid" aria-label="핵심 경험 키워드">
+          <button class="trio-card" type="button" data-trio-key="process" aria-expanded="false" aria-controls="trio-panel">
+            <span>
+              <strong>공정 이해</strong>
+              <span>현장 공정을 이해하고 개선해본 경험</span>
+            </span>
+            <span class="trio-icon" aria-hidden="true">+</span>
+          </button>
+          <button class="trio-card" type="button" data-trio-key="data" aria-expanded="false" aria-controls="trio-panel">
+            <span>
+              <strong>데이터 기반 문제 해결</strong>
+              <span>데이터로 분석하고 판단해본 경험</span>
+            </span>
+            <span class="trio-icon" aria-hidden="true">+</span>
+          </button>
+          <button class="trio-card" type="button" data-trio-key="collab" aria-expanded="false" aria-controls="trio-panel">
+            <span>
+              <strong>협업</strong>
+              <span>사람과 기관을 연결해 함께 만든 경험</span>
+            </span>
+            <span class="trio-icon" aria-hidden="true">+</span>
+          </button>
+        </div>
+        <div class="trio-panel" id="trio-panel">
+          <div class="trio-chip-list" id="trioChipList" aria-label="연결 경험"></div>
+        </div>
+      </div>
+    </section>
+
     <section id="goal">
       <div class="wrap">
         <div class="section-head">
@@ -672,7 +850,7 @@
           </div>
           <p class="section-note">도구 카드는 최대 3개까지 노출</p>
         </div>
-        <details class="tool-card item-card">
+        <details class="tool-card item-card" id="ai-chatbot-tool">
           <summary>
             <strong>챗봇</strong>
             <p class="placeholder">카드를 열면 챗봇을 바로 사용해볼 수 있습니다. ...</p>
@@ -764,7 +942,7 @@
           <p class="section-note">최신순 정렬</p>
         </div>
         <div class="card-grid">
-          <details class="item-card toggle-card" open>
+          <details class="item-card toggle-card" id="hd-future-builder" open>
             <summary>
               <span class="date">2026.07.20 - 2026.10.22 · 진행 중</span>
               <strong>HD현대 Future Builder 아카데미</strong>
@@ -784,7 +962,7 @@
               <div class="photo-slot">사진 추가 공간</div>
             </div>
           </details>
-          <details class="item-card toggle-card">
+          <details class="item-card toggle-card" id="onsite-practice">
             <summary>
               <span class="date">2024.09 - 2025.01</span>
               <strong>현장실습</strong>
@@ -829,9 +1007,9 @@
           <p class="section-note">취득일 입력 후 최신순 정렬 예정</p>
         </div>
         <ul class="license-list">
-          <li><strong>산업안전기사</strong><span>현장 안전관리 및 위험요인 예방</span></li>
+          <li id="safety-cert"><strong>산업안전기사</strong><span>현장 안전관리 및 위험요인 예방</span></li>
           <li><strong>위험물산업기사</strong><span>화학물질·위험물 취급 기준 이해</span></li>
-          <li><strong>ADsP</strong><span>데이터 분석 기획 및 통계 기반 해석</span></li>
+          <li id="data-cert"><strong>ADsP</strong><span>데이터 분석 기획 및 통계 기반 해석</span></li>
           <li><strong>AI 비즈니스 활용 AIBT 2급</strong><span>AI 도구 기반 업무 개선 및 자동화 이해</span></li>
         </ul>
       </div>
@@ -844,7 +1022,7 @@
           <p class="section-note">수상과 분리해 문제 해결 과정을 정리</p>
         </div>
         <div class="card-grid">
-          <details class="item-card toggle-card">
+          <details class="item-card toggle-card" id="capstone-2">
             <summary>
               <span class="date">2023.03 - 2023.06</span>
               <strong>캡스톤디자인 II</strong>
@@ -899,7 +1077,7 @@
             <p>굴패각 활용 상수도관 도료 제조 프로젝트로 수상했습니다.</p>
             <button class="award-link" type="button" data-project="capstone-1">캡스톤디자인 I 보기</button>
           </article>
-          <details class="item-card toggle-card">
+          <details class="item-card toggle-card" id="patent-award">
             <summary>
               <span class="date">2022.08</span>
               <strong>부산특허전략대회 대상</strong>
@@ -930,7 +1108,7 @@
           <p class="section-note">최신순 정렬</p>
         </div>
         <div class="card-grid">
-          <details class="item-card toggle-card">
+          <details class="item-card toggle-card" id="value-esg">
             <summary>
               <span class="date">2022.10 - 2023.02</span>
               <strong>롯데지주 Value For ESG 대학생 봉사동아리</strong>
@@ -946,7 +1124,7 @@
               <div class="photo-slot">사진 추가 공간</div>
             </div>
           </details>
-          <details class="item-card toggle-card">
+          <details class="item-card toggle-card" id="naver-sw">
             <summary>
               <span class="date">2022.05 - 2022.12</span>
               <strong>NAVER 소프트웨어야 놀자 대학생 코딩 교육 봉사동아리</strong>
@@ -985,6 +1163,27 @@
   </footer>
 
   <script>
+    const trioExperienceMap = {
+      process: [
+        { label: "HD현대 Future Builder 아카데미 (조선공학·생산관리)", target: "hd-future-builder" },
+        { label: "현장실습 (레이저 각인 공정 최적화)", target: "onsite-practice" },
+        { label: "캡스톤디자인 II (전지 공정 최적화)", target: "capstone-2" },
+        { label: "캡스톤디자인 I (도료 공정 최적화)", target: "capstone-1" },
+        { label: "자격증 (산업안전기사, 위험물산업기사)", target: "safety-cert" }
+      ],
+      data: [
+        { label: "HD현대 Future Builder 아카데미 (CNN 결함 분류, PHM 데이터 전처리)", target: "hd-future-builder" },
+        { label: "부산특허전략대회 대상 (특허 데이터 정량 분석)", target: "patent-award" },
+        { label: "자격증 (ADsP, AIBT)", target: "data-cert" },
+        { label: "4번 AI 도구 (챗봇)", target: "ai-chatbot-tool" }
+      ],
+      collab: [
+        { label: "롯데지주 Value For ESG (펀딩 기획)", target: "value-esg" },
+        { label: "NAVER 소프트웨어야 놀자 (교육 총괄 진행)", target: "naver-sw" },
+        { label: "현장실습 (특허이전계획서, 외부 기술 이전)", target: "onsite-practice" }
+      ]
+    };
+
     const navLinks = Array.from(document.querySelectorAll('nav a'));
     const sections = navLinks
       .map((link) => document.querySelector(link.getAttribute('href')))
@@ -995,14 +1194,65 @@
       window.setTimeout(() => element.classList.remove('highlight'), 900);
     };
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const openAndScroll = (target) => {
       if (!target) return;
       if (target.tagName.toLowerCase() === 'details') {
         target.open = true;
       }
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
       flash(target);
     };
+
+    const trioCards = Array.from(document.querySelectorAll('.trio-card'));
+    const trioPanel = document.querySelector('#trio-panel');
+    const trioChipList = document.querySelector('#trioChipList');
+    let activeTrioKey = "";
+
+    const closeTrioPanel = () => {
+      activeTrioKey = "";
+      trioCards.forEach((card) => {
+        card.classList.remove('is-active');
+        card.setAttribute('aria-expanded', 'false');
+      });
+      trioPanel.classList.remove('is-open');
+      trioChipList.textContent = "";
+    };
+
+    const openTrioPanel = (key) => {
+      activeTrioKey = key;
+      trioCards.forEach((card) => {
+        const isActive = card.dataset.trioKey === key;
+        card.classList.toggle('is-active', isActive);
+        card.setAttribute('aria-expanded', String(isActive));
+      });
+
+      trioChipList.textContent = "";
+      trioExperienceMap[key].forEach((experience) => {
+        const chip = document.createElement('button');
+        chip.className = 'trio-chip';
+        chip.type = 'button';
+        chip.dataset.target = experience.target;
+        chip.textContent = experience.label;
+        chip.addEventListener('click', () => {
+          openAndScroll(document.getElementById(experience.target));
+        });
+        trioChipList.appendChild(chip);
+      });
+      trioPanel.classList.add('is-open');
+    };
+
+    trioCards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const key = card.dataset.trioKey;
+        if (activeTrioKey === key) {
+          closeTrioPanel();
+          return;
+        }
+        openTrioPanel(key);
+      });
+    });
 
     document.querySelectorAll('.click-card').forEach((card) => {
       const go = () => openAndScroll(document.getElementById(card.dataset.target));
